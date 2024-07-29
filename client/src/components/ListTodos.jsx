@@ -7,12 +7,12 @@ const ListTodos = () => {
 
   const handleDelete = (id) => {
     axios.delete(`http://localhost:5000/todos/${id}`).then((res) => {
-      console.log(res.data);
       setTodoList(
         todoList.filter((item) => {
           item.id !== id;
         })
       );
+      window.location = "/";
     });
   };
 
@@ -24,7 +24,7 @@ const ListTodos = () => {
 
   useEffect(() => {
     getTodos();
-  }, [todoList]);
+  }, []);
   return (
     <>
       <div className="col-10 m-auto">
@@ -53,7 +53,7 @@ const ListTodos = () => {
                 <tr key={index}>
                   <td className="col-10 text-start">{item.description}</td>
                   <td className="col-1 text-center">
-                    <EditTodo />
+                    <EditTodo item={item} />
                   </td>
                   <td className="col-1 text-center">
                     <button
