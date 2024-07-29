@@ -68,17 +68,33 @@ app.put("/todos/:id", async (req, res) => {
 
 //DELETE A TODO
 
-app.delete("/todos/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
+// app.delete("/todos/:id", async (req, res) => {
+//   try {
+//     const { id } = req.params;
 
-    const deleteTodo = await pool.query("DELETE FROM todo WHERE todo_id = $1", [
-      id,
-    ]);
-    res.json("Todo was deleted");
-  } catch (error) {
-    console.log(error.message);
-  }
+//     const deleteTodo = await pool.query("DELETE FROM todo WHERE todo_id = $1", [
+//       id,
+//     ]);
+//     res.json("Todo was deleted");
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// });
+
+app.delete("/todos/:id", (req, res) => {
+  const { id } = req.params;
+
+  pool
+    .query("DELETE FROM todo WHERE todo_id = $1", [id])
+    .then(() => {
+      res.json("Todo was deleted");
+    })
+    .catch((error) => {
+      console.log(error.message);
+      res
+        .status(500)
+        .json({ error: "An error occurred while deleting the todo" });
+    });
 });
 
 //HOSTING
